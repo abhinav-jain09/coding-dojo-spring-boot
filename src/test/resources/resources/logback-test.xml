@@ -1,0 +1,13 @@
+<!-- Use debug=true here if you want to see output from the appender itself -->
+<!-- Use line=true here if you want to see the line of code that generated this log -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- Use shutdownHook so that we can close gracefully and finish the log drain -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <!-- LOG everything at INFO level -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
