@@ -53,6 +53,10 @@
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -70,6 +74,29 @@
                     <annotationProcessors>
                         <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
                     </annotationProcessors>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                    <changeSetAuthor>Abhinav Jain</changeSetAuthor>
+<!--
+                    <changeLogFile>src/main/resources/db/changelog/changes/db-changelog.xml</changeLogFile>
+-->
+                   <!-- <changelogSchemaName>stock</changelogSchemaName>
+                    <defaultSchemaName>stock</defaultSchemaName>
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <diffChangeLogFile>src/main/resources/liquibase-diff-changeLog.xml</diffChangeLogFile>
+                    <url>jdbc:mysql://localhost:3306/stock?useSSL=false&amp;createDatabaseIfNotExist=true</url>
+                    <username>stock</username>
+                    <password>nssdw</password>
+                    <referenceUrl>
+                        hibernate:spring:nl.ns.sdw.stockmanagement.models?dialect=liquibase.ext.hibernate.database.HibernateGenericDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+                    </referenceUrl>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>-->
                 </configuration>
             </plugin>
         </plugins>

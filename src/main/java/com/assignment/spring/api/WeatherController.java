@@ -14,14 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WeatherController {
-
+@Autowired
     private RestTemplate restTemplate;
+@Autowired
     private WeatherDataProcessing weatherDataProcessing;
-
-
-
 
 
     @RequestMapping("/weather")
