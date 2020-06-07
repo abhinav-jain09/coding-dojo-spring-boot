@@ -45,22 +45,26 @@ if( acceptEncodingHeaderList.contains("gzip,deflate") )
 
 
 // Match based on body
-def requestBody = mockRequest.getRequestContent()
-log.info "Request body: " + requestBody
+    def requestBody = mockRequest.getRequestContent()
+    log.info "Request body: " + requestBody
 
-if( requestBody.contains("some data") )
-{
+    if( requestBody.contains("some data") )
+    {
     // return the name of the response you want to dispatch
     return "Response N"
-}
-*/
-</con:dispatchPath><con:response name="Response 1" id="a8606592-b2ce-4342-a530-585ecc339a85" httpResponseStatus="200"><con:settings/><con:responseContent>{
-    "coord": {
-        "lon": 4.89,
-        "lat": 52.37
-    },
-    "weather": [
-        {
+    }
+    */
+</con:dispatchPath>
+    <con:response name="Response 1" id="a8606592-b2ce-4342-a530-585ecc339a85" httpResponseStatus="200"
+                  mediaType="application/json">
+        <con:settings/>
+        <con:responseContent>{
+            "coord": {
+            "lon": 4.89,
+            "lat": 52.37
+            },
+            "weather": [
+            {
             "id": 801,
             "main": "Clouds",
             "description": "few clouds",

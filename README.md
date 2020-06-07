@@ -13,6 +13,19 @@ As the new engineer leading this project, your first task is to make it producti
 necessary to achieve the goal.
 
 ### How to deliver the code
+Source code can be downloaded from[Git hub location](https://github.com/abhinav-jain09/coding-dojo-spring-boot.git)
+
+###To build the source code there run the following command 
+-mvn clean install -Denv=docker
+
+###To make the application up and running run the following command 
+-docker-compose up
+
+Basic troublesoting 
+
+Port are not available error .To kill the port 8080 first we need to find the process id and then kill the process which is running on port
+lsof -i tcp:8080 -s tcp:listen 
+Kill -9
 
 Please send an email containing your solution with a link to a public repository.
 

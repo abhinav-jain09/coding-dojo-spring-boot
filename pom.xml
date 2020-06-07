@@ -38,6 +38,12 @@
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>2.23.0</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>postgresql</groupId>
@@ -127,17 +133,22 @@
                 <activatedProperties>prod</activatedProperties>
             </properties>
         </profile>
-
-            <profile>
-                <id>docker</id>
-                <activation>
-                    <file>
-                        <exists>Dockerfile</exists>
-                    </file>
-                    <property>
-                        <name>env</name>
-                        <value>docker</value>
-                    </property>
+        <profile>
+            <id>apptest</id>
+            <properties>
+                <activatedProperties>apptest</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <file>
+                    <exists>Dockerfile</exists>
+                </file>
+                <property>
+                    <name>env</name>
+                    <value>docker</value>
+                </property>
                 </activation>
                 <build>
                     <plugins>
