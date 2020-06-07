@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WeatherDataProcessing {
-    @Autowired
+
     private final WeatherRepository weatherRepository;
+
     public Weather mapWeatherData(WeatherResponse response) {
       Weather entity = WeatherResponseMapper.mapper.apply(response);
         weatherRepository.save(entity);

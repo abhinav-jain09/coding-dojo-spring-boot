@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class WeatherController {
 
     private final RestTemplate restTemplate;
 
     private final WeatherDataProcessing weatherDataProcessing;
+
 
     @GetMapping("/weather")
     @ResponseBody
