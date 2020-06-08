@@ -1,55 +1,45 @@
 package com.assignment.spring;
 
-import com.assignment.spring.api.WeatherController;
-import com.assignment.spring.dto.WeatherResponse;
+import com.assignment.spring.Exceptions.NotValidInput;
 import com.assignment.spring.entity.Weather;
-import com.assignment.spring.repository.WeatherRepository;
-import com.assignment.spring.services.WeatherDataProcessing;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import static net.bytebuddy.matcher.ElementMatchers.any;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = WeatherController.class)
-public class ControllerIntegrationTest {
 
-    private MockMvc mvc;
-    @Before
-    public void setUp() throws Exception {
-        RestTemplate restTemplate = new RestTemplate();
-        WeatherRepository localMockRepository = Mockito.mock(WeatherRepository.class);
-        Mockito.when(localMockRepository.save(Mockito.any())).thenReturn( Weather.builder().city("Amsterdam").build());
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles({"apptest"})
+public class ControllerIntegrationTest extends BaseTest {
+    //   @LocalServerPort
+    private static final int localServerPort = 1080;
+    private static final String localhost = "http://127.0.0.1:";
+    private static final String context = "/weather?city=";
+    @Autowired
+    RestTemplate restTemplate;
 
-        WeatherDataProcessing weatherDataProcessing = new WeatherDataProcessing(localMockRepository);
 
-          mvc = MockMvcBuilders.standaloneSetup(new WeatherController(restTemplate,weatherDataProcessing)).build();
-        MockitoAnnotations.initMocks(this);
-        JacksonTester.initFields(this, new ObjectMapper());
-    }
     @Test
-    public void getAllEmployeesAPI() throws Exception {
-        mvc.perform(MockMvcRequestBuilders
-                .get("/weather?city={city}", "Amsterdam")
-                .accept(MediaType.APPLICATION_JSON))
+    public void WeatherControllerTestIT() throws Exception {
+        ResponseEntity<Weather> forEntity = restTemplate.getForEntity(localhost + localServerPort + context + "Amsterdam", Weather.class);
+        System.out.println(forEntity.getBody());
+    }
 
-                .andExpect(status().isOk());
+    @Test(expected = NotValidInput.class)
+    public void WeatherControllerNotValidResponseTestIT() throws Exception {
+        try {
+            ResponseEntity<Weather> forEntity = restTemplate.getForEntity(localhost + localServerPort + context + "nocity", Weather.class);
+
+        } catch (HttpStatusCodeException exception) {
+
+            throw new NotValidInput(exception.getMessage());
+        }
 
     }
 }

@@ -17,6 +17,11 @@ services:
       - mysql
     environment:
       - database-host=mysql
-      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_PROFILES_ACTIVE=${denv}
     container_name: weather-app
-    command: sh -c "/wait && /sayhello"
+
+  soupui:
+    image: soupui:0.0.1-SNAPSHOT
+    ports:
+      - "8089:8089"
+    container_name: soupui

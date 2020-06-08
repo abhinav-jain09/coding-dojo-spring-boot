@@ -20,12 +20,19 @@
         <resources.dir>${project.basedir}/src/main/resources</resources.dir>
         <assembly.extract.dir>${project.build.directory}/assembly</assembly.extract.dir>
         <image.name.db>weather-db</image.name.db>
+        <image.name.soupui>soupui</image.name.soupui>
+        <springfox.swagger.version>2.9.2</springfox.swagger.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -44,13 +51,28 @@
             <version>2.23.0</version>
             <scope>test</scope>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.1-901-1.jdbc4</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.4</version>
         </dependency>
-
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox.swagger.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
@@ -74,6 +96,16 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+            <version>3.10.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-client-java</artifactId>
+            <version>3.10.8</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -83,7 +115,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-
             </plugin>
 
             <plugin>
@@ -169,7 +200,8 @@
                                     <image>
                                         <name>${image.name}:%v</name>
                                         <build>
-                                            <dockerFileDir>${project.basedir}</dockerFileDir>                                            <filter>@</filter>
+                                            <dockerFileDir>${project.basedir}</dockerFileDir>
+                                            <filter>@</filter>
                                             <tags>
                                                 <!--suppress MavenModelInspection -->
                                                 <tag>${project.version}</tag>
@@ -179,23 +211,46 @@
                                         </build>
                                     </image>
                                     <image>
-                                    <!--suppress MavenModelInspection -->
-                                    <name>${image.name.db}:%v</name>
-                                    <!-- <registry>${docker.registry}</registry>-->
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
-                                        <filter>@</filter>
-                                        <!-- <assembly>
-                                        <descriptor>assembly.xml</descriptor>
-                                        </assembly>-->
-                                        <tags>
-                                            <!--suppress MavenModelInspection -->
-                                            <tag>${project.version}</tag>
-                                            <!--suppress MavenModelInspection -->
-                                            <tag>${docker.tag.version}</tag>
-                                        </tags>
-                                    </build>
-                                </image>
+                                        <!--suppress MavenModelInspection -->
+                                        <name>${image.name.db}:%v</name>
+                                        <!-- <registry>${docker.registry}</registry>-->
+                                        <build>
+                                            <dockerFileDir>${project.basedir}/src/main/dockerfiles/db</dockerFileDir>
+                                            <filter>@</filter>
+                                            <!-- <assembly>
+                                            <descriptor>assembly.xml</descriptor>
+                                            </assembly>-->
+                                            <tags>
+                                                <!--suppress MavenModelInspection -->
+                                                <tag>${project.version}</tag>
+                                                <!--suppress MavenModelInspection -->
+                                                <tag>${docker.tag.version}</tag>
+                                            </tags>
+                                        </build>
+                                    </image>
+
+
+                                    <image>
+                                        <!--suppress MavenModelInspection -->
+                                        <name>${image.name.soupui}:%v</name>
+                                        <!-- <registry>${docker.registry}</registry>-->
+                                        <build>
+                                            <dockerFileDir>${project.basedir}/src/main/dockerfiles/mockserver
+                                            </dockerFileDir>
+                                            <filter>@</filter>
+                                            <!-- <assembly>
+                                            <descriptor>assembly.xml</descriptor>
+                                            </assembly>-->
+                                            <tags>
+                                                <!--suppress MavenModelInspection -->
+                                                <tag>${project.version}</tag>
+                                                <!--suppress MavenModelInspection -->
+                                                <tag>${docker.tag.version}</tag>
+                                            </tags>
+                                        </build>
+                                    </image>
+
+
                                 </images>
                             </configuration>
                         </plugin>
